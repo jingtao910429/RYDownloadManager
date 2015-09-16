@@ -16,6 +16,7 @@
 + (instancetype)sharedManager;
 
 - (void)downloadFileForURL:(NSString *)url
+                  fileType:(NSString *)fileType
                   withName:(NSString *)fileName
           inDirectoryNamed:(NSString *)directory
              progressBlock:(void(^)(CGFloat progress))progressBlock
@@ -23,12 +24,14 @@
       enableBackgroundMode:(BOOL)backgroundMode;
 
 - (void)downloadFileForURL:(NSString *)url
+                  fileType:(NSString *)fileType
           inDirectoryNamed:(NSString *)directory
              progressBlock:(void(^)(CGFloat progress))progressBlock
            completionBlock:(void(^)(BOOL completed))completionBlock
       enableBackgroundMode:(BOOL)backgroundMode;
 
 - (void)downloadFileForURL:(NSString *)url
+                  fileType:(NSString *)fileType
              progressBlock:(void(^)(CGFloat progress))progressBlock
            completionBlock:(void(^)(BOOL completed))completionBlock
       enableBackgroundMode:(BOOL)backgroundMode;
@@ -36,6 +39,7 @@
 #pragma mark - Download with estimated time
 
 - (void)downloadFileForURL:(NSString *)url
+                  fileType:(NSString *)fileType
                   withName:(NSString *)fileName
           inDirectoryNamed:(NSString *)directory
              progressBlock:(void(^)(CGFloat progress))progressBlock
@@ -44,6 +48,7 @@
       enableBackgroundMode:(BOOL)backgroundMode requestTag:(NSInteger)requestTag;
 
 - (void)downloadFileForURL:(NSString *)url
+                  fileType:(NSString *)fileType
           inDirectoryNamed:(NSString *)directory
              progressBlock:(void(^)(CGFloat progress))progressBlock
              remainingTime:(void(^)(NSUInteger seconds))remainingTimeBlock
@@ -51,6 +56,7 @@
       enableBackgroundMode:(BOOL)backgroundMode requestTag:(NSInteger)requestTag;
 
 - (void)downloadFileForURL:(NSString *)url
+                  fileType:(NSString *)fileType
              progressBlock:(void(^)(CGFloat progress))progressBlock
              remainingTime:(void(^)(NSUInteger seconds))remainingTimeBlock
            completionBlock:(void(^)(BOOL completed))completionBlock

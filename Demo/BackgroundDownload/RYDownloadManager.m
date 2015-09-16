@@ -50,9 +50,10 @@
     return self;
 }
 
-#pragma mark - Downloading... 
+#pragma mark - Downloading...
 
 - (void)downloadFileForURL:(NSString *)urlString
+                  fileType:(NSString *)fileType
                   withName:(NSString *)fileName
           inDirectoryNamed:(NSString *)directory
              progressBlock:(void(^)(CGFloat progress))progressBlock
@@ -61,8 +62,20 @@
       enableBackgroundMode:(BOOL)backgroundMode requestTag:(NSInteger)requestTag{
     NSURL *url = [NSURL URLWithString:urlString];
     if (!fileName) {
-        fileName = [urlString lastPathComponent];
+        
+        if (1 == [[[url lastPathComponent] componentsSeparatedByString:@"."] count]) {
+            fileName = [NSString stringWithFormat:@"%@.%@",[urlString lastPathComponent],fileType];
+        }else {
+            fileName = [url lastPathComponent];
+        }
+        
+    }else{
+        
+        if (1 == [[fileName componentsSeparatedByString:@"."] count]) {
+            fileName = [NSString stringWithFormat:@"%@.%@",fileName,fileType];
+        }
     }
+    
     
     if (![self fileDownloadCompletedForUrl:urlString]) {
         NSLog(@"File is downloading!");
@@ -86,12 +99,14 @@
 }
 
 - (void)downloadFileForURL:(NSString *)url
+                  fileType:(NSString *)fileType
           inDirectoryNamed:(NSString *)directory
              progressBlock:(void(^)(CGFloat progress))progressBlock
              remainingTime:(void(^)(NSUInteger seconds))remainingTimeBlock
            completionBlock:(void(^)(BOOL completed))completionBlock
       enableBackgroundMode:(BOOL)backgroundMode requestTag:(NSInteger)requestTag {
     [self downloadFileForURL:url
+                    fileType:(NSString *)fileType
                     withName:[url lastPathComponent]
             inDirectoryNamed:directory
                progressBlock:progressBlock
@@ -101,11 +116,13 @@
 }
 
 - (void)downloadFileForURL:(NSString *)url
+                  fileType:(NSString *)fileType
              progressBlock:(void(^)(CGFloat progress))progressBlock
              remainingTime:(void(^)(NSUInteger seconds))remainingTimeBlock
            completionBlock:(void(^)(BOOL completed))completionBlock
       enableBackgroundMode:(BOOL)backgroundMode requestTag:(NSInteger)requestTag {
     [self downloadFileForURL:url
+                    fileType:(NSString *)fileType
                     withName:[url lastPathComponent]
             inDirectoryNamed:nil
                progressBlock:progressBlock
@@ -115,27 +132,31 @@
 }
 
 - (void)downloadFileForURL:(NSString *)urlString
+                  fileType:(NSString *)fileType
                   withName:(NSString *)fileName
           inDirectoryNamed:(NSString *)directory
              progressBlock:(void(^)(CGFloat progress))progressBlock
            completionBlock:(void(^)(BOOL completed))completionBlock
       enableBackgroundMode:(BOOL)backgroundMode requestTag:(NSInteger)requestTag {
     [self downloadFileForURL:urlString
-                   withName:fileName
-           inDirectoryNamed:directory
-              progressBlock:progressBlock
-              remainingTime:nil
-            completionBlock:completionBlock
+                    fileType:(NSString *)fileType
+                    withName:fileName
+            inDirectoryNamed:directory
+               progressBlock:progressBlock
+               remainingTime:nil
+             completionBlock:completionBlock
         enableBackgroundMode:backgroundMode requestTag:(NSInteger)requestTag];
 }
 
 - (void)downloadFileForURL:(NSString *)urlString
+                  fileType:(NSString *)fileType
           inDirectoryNamed:(NSString *)directory
              progressBlock:(void(^)(CGFloat progress))progressBlock
            completionBlock:(void(^)(BOOL completed))completionBlock
       enableBackgroundMode:(BOOL)backgroundMode {
     // if no file name was provided, use the last path component of the URL as its name
     [self downloadFileForURL:urlString
+                    fileType:(NSString *)fileType
                     withName:[urlString lastPathComponent]
             inDirectoryNamed:directory
                progressBlock:progressBlock
@@ -144,10 +165,12 @@
 }
 
 - (void)downloadFileForURL:(NSString *)urlString
+                  fileType:(NSString *)fileType
              progressBlock:(void(^)(CGFloat progress))progressBlock
            completionBlock:(void(^)(BOOL completed))completionBlock
       enableBackgroundMode:(BOOL)backgroundMode {
     [self downloadFileForURL:urlString
+                    fileType:(NSString *)fileType
             inDirectoryNamed:nil
                progressBlock:progressBlock
              completionBlock:completionBlock
@@ -213,7 +236,7 @@ totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite {
 }
 
 - (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didFinishDownloadingToURL:(NSURL *)location {
-//    NSLog(@"Download finisehd!");
+    //    NSLog(@"Download finisehd!");
     
     NSError *error;
     NSURL *destinationLocation;

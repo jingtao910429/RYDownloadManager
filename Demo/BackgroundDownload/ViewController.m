@@ -47,7 +47,7 @@
     
     __strong ViewController *weakSelf = self;
     
-    [[RYDownloadManager sharedManager] downloadFileForURL:self.filePaths[(sender.tag - 1)%10] progressBlock:^(CGFloat progress) {
+    [[RYDownloadManager sharedManager] downloadFileForURL:self.filePaths[(sender.tag - 1)%10] fileType:@"dat" progressBlock:^(CGFloat progress) {
         //进度
         
         [weakSelf.progressDict setValue:[NSString stringWithFormat:@"%f",progress] forKey:[NSString stringWithFormat:@"%ld",(long)sender.tag]];
